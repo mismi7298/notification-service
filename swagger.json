@@ -1,0 +1,282 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "Notification Service API",
+		"version": "1.0.0",
+		"description": "API for sending notifications and managing templates"
+	},
+	"tags": [
+		{ "name": "notifications", "description": "Notification operations" },
+		{ "name": "templates", "description": "Template operations" }
+	],
+	"servers": [
+		{ "url": "http://localhost:8080" }
+	],
+	"paths": {
+		"/notifications": {
+					"post": {
+						"tags": ["notifications"],
+						"summary": "Create a notification",
+						"requestBody": {
+							"required": true,
+							"content": {
+								"application/json": {
+									"schema": { "$ref": "#/components/schemas/CreateNotificationRequest" }
+								}
+							}
+						},
+						"responses": {
+							"201": {
+								"description": "Notification created",
+								"content": {
+									"application/json": {
+										"schema": { "$ref": "#/components/schemas/NotificationResponse" }
+									}
+								}
+							},
+							"400": { "description": "Bad request" },
+							"500": { "description": "Internal server error" }
+						}
+					}
+		},
+		"/notifications/{id}": {
+					"get": {
+						"tags": ["notifications"],
+						"summary": "Get notification by ID",
+						"parameters": [
+							{
+								"in": "path",
+								"name": "id",
+								"required": true,
+								"schema": { "type": "string" }
+							}
+						],
+						"responses": {
+							"200": {
+								"description": "Notification found",
+								"content": {
+									"application/json": {
+										"schema": { "$ref": "#/components/schemas/NotificationResponse" }
+									}
+								}
+							},
+							"500": { "description": "Internal server error" }
+						}
+					},
+					"put": {
+						"tags": ["notifications"],
+						"summary": "Update a notification",
+						"parameters": [
+							{
+								"in": "path",
+								"name": "id",
+								"required": true,
+								"schema": { "type": "string" }
+							}
+						],
+						"requestBody": {
+							"required": true,
+							"content": {
+								"application/json": {
+									"schema": { "$ref": "#/components/schemas/UpdateNotificationRequest" }
+								}
+							}
+						},
+						"responses": {
+							"200": {
+								"description": "Notification updated",
+								"content": {
+									"application/json": {
+										"schema": { "$ref": "#/components/schemas/NotificationResponse" }
+									}
+								}
+							},
+							"400": { "description": "Bad request" },
+							"500": { "description": "Internal server error" }
+						}
+					}
+		},
+		"/templates": {
+					"post": {
+						"tags": ["templates"],
+						"summary": "Create a template",
+						"requestBody": {
+							"required": true,
+							"content": {
+								"application/json": {
+									"schema": { "$ref": "#/components/schemas/CreateTemplateRequest" }
+								}
+							}
+						},
+						"responses": {
+							"201": {
+								"description": "Template created",
+								"content": {
+									"application/json": {
+										"schema": { "$ref": "#/components/schemas/TemplateResponse" }
+									}
+								}
+							},
+							"400": { "description": "Bad request" },
+							"500": { "description": "Internal server error" }
+						}
+					}
+		},
+		"/templates/{id}": {
+					"get": {
+						"tags": ["templates"],
+						"summary": "Get template by ID",
+						"parameters": [
+							{
+								"in": "path",
+								"name": "id",
+								"required": true,
+								"schema": { "type": "string" }
+							}
+						],
+						"responses": {
+							"200": {
+								"description": "Template found",
+								"content": {
+									"application/json": {
+										"schema": { "$ref": "#/components/schemas/TemplateResponse" }
+									}
+								}
+							},
+							"500": { "description": "Internal server error" }
+						}
+					},
+					"put": {
+						"tags": ["templates"],
+						"summary": "Update a template",
+						"parameters": [
+							{
+								"in": "path",
+								"name": "id",
+								"required": true,
+								"schema": { "type": "string" }
+							}
+						],
+						"requestBody": {
+							"required": true,
+							"content": {
+								"application/json": {
+									"schema": { "$ref": "#/components/schemas/UpdateTemplateRequest" }
+								}
+							}
+						},
+						"responses": {
+							"200": {
+								"description": "Template updated",
+								"content": {
+									"application/json": {
+										"schema": { "$ref": "#/components/schemas/TemplateResponse" }
+									}
+								}
+							},
+							"400": { "description": "Bad request" },
+							"500": { "description": "Internal server error" }
+						}
+					},
+					"delete": {
+						"tags": ["templates"],
+						"summary": "Delete a template",
+						"parameters": [
+							{
+								"in": "path",
+								"name": "id",
+								"required": true,
+								"schema": { "type": "string" }
+							}
+						],
+						"responses": {
+							"204": { "description": "Template deleted" },
+							"500": { "description": "Internal server error" }
+						}
+					}
+		}
+	},
+	"components": {
+		"schemas": {
+			"CreateNotificationRequest": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"status": { "type": "string" },
+					"message": { "type": "string" },
+					"notification_schedule": { "$ref": "#/components/schemas/NotificationSchedule" },
+					"sender": { "type": "string" },
+					"receiver": { "type": "string" },
+					"type": { "type": "string" },
+					"channels": { "type": "array", "items": { "type": "string" } }
+				}
+			},
+			"UpdateNotificationRequest": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"status": { "type": "string" },
+					"message": { "type": "string" },
+					"sender": { "type": "string" },
+					"receiver": { "type": "string" },
+					"type": { "type": "string" },
+					"channels": { "type": "array", "items": { "type": "string" } },
+					"notification_schedule": { "$ref": "#/components/schemas/NotificationSchedule" }
+				}
+			},
+			"NotificationResponse": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"status": { "type": "string" },
+					"message": { "type": "string" },
+					"created_at": { "type": "string", "format": "date-time" },
+					"updated_at": { "type": "string", "format": "date-time" },
+					"sent_at": { "type": "string", "format": "date-time" },
+					"sender": { "type": "string" },
+					"receiver": { "type": "string" },
+					"type": { "type": "string" },
+					"notification_schedule": { "type": "string", "format": "date-time" },
+					"channels": { "type": "array", "items": { "type": "string" } }
+				}
+			},
+			"NotificationSchedule": {
+				"type": "object",
+				"properties": {
+					"repeated": { "type": "boolean" },
+					"cron_expression": { "type": "string" },
+					"next_run_at": { "type": "string", "format": "date-time" }
+				}
+			},
+			"CreateTemplateRequest": {
+				"type": "object",
+				"properties": {
+					"type": { "type": "string" },
+					"Channel": { "type": "string" },
+					"content": { "type": "string" },
+					"user_id": { "type": "string" }
+				}
+			},
+			"UpdateTemplateRequest": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"type": { "type": "string" },
+					"Channel": { "type": "string" },
+					"content": { "type": "string" }
+				}
+			},
+			"TemplateResponse": {
+				"type": "object",
+				"properties": {
+					"id": { "type": "string" },
+					"type": { "type": "string" },
+					"Channel": { "type": "string" },
+					"content": { "type": "string" },
+					"created_at": { "type": "string" },
+					"updated_at": { "type": "string" }
+				}
+			}
+		}
+	}
+}
